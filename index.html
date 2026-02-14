@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feliz San Valentín, Mi Cibo ❤️</title>
+
+  <style>
+    :root{
+      --pink:#e6005c;
+      --lightPink:#ff4d88;
+      --bg1:#fff0f6;
+      --bg2:#ffe4ef;
+      --text:#2b2b2b;
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg,var(--bg1),var(--bg2));
+      min-height:100vh;
+      padding:20px;
+      overflow-x:hidden; /* Permite scroll vertical */
+    }
+
+    /* ❤️ CORAZONES FLOTANTES */
+    .hearts{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      overflow:hidden;
+    }
+
+    .heart{
+      position:absolute;
+      bottom:-40px;
+      font-size:20px;
+      animation: floatUp linear infinite;
+      opacity:0.7;
+    }
+
+    @keyframes floatUp{
+      0%{
+        transform:translateY(0) scale(1);
+        opacity:0.8;
+      }
+      100%{
+        transform:translateY(-120vh) scale(1.6);
+        opacity:0;
+      }
+    }
+
+    .container{
+      width:100%;
+      max-width:1000px;
+      background:white;
+      border-radius:20px;
+      box-shadow:0 20px 50px rgba(0,0,0,.15);
+      overflow:hidden;
+      position:relative;
+      z-index:1;
+      margin:auto;
+    }
+
+    header{
+      background: linear-gradient(90deg,var(--pink),var(--lightPink));
+      color:white;
+      text-align:center;
+      padding:30px 20px;
+    }
+
+    header h1{
+      font-size:clamp(26px,4vw,42px);
+    }
+
+    .content{
+      display:flex;
+      flex-wrap:wrap;
+      padding:25px;
+      gap:25px;
+    }
+
+    .left,
+    .right{
+      flex:1 1 400px;
+    }
+
+    .phrases{
+      list-style:none;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-bottom:20px;
+    }
+
+    .phrases li{
+      background:#fff0f6;
+      padding:12px;
+      border-radius:12px;
+      font-style:italic;
+      text-align:center;
+    }
+
+    .letter{
+      background:#ffe9f2;
+      padding:18px;
+      border-left:5px solid var(--pink);
+      border-radius:12px;
+      line-height:1.6;
+    }
+
+    .sign{
+      margin-top:12px;
+      font-weight:bold;
+      color:var(--pink);
+    }
+
+    .right{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .right img{
+      width:100%;
+      max-width:400px;
+      border-radius:20px;
+      object-fit:cover;
+      box-shadow:0 15px 40px rgba(230,0,92,.2);
+    }
+
+    footer{
+      text-align:center;
+      padding:15px;
+      font-size:13px;
+      opacity:.7;
+    }
+
+    /* 📱 CELULAR */
+    @media (max-width:600px){
+      .content{
+        flex-direction:column;
+      }
+
+      header{
+        padding:25px 15px;
+      }
+
+      .letter{
+        font-size:15px;
+      }
+    }
+
+    /* 📲 TABLET */
+    @media (min-width:601px) and (max-width:992px){
+      .content{
+        flex-direction:column;
+      }
+    }
+
+    /* 🔒 PANTALLA DE CONTRASEÑA */
+    .lock{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.6);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      backdrop-filter:blur(6px);
+      z-index:9999;
+    }
+
+    .lockbox{
+      background:white;
+      padding:30px;
+      border-radius:20px;
+      text-align:center;
+      width:90%;
+      max-width:400px;
+      box-shadow:0 20px 70px rgba(0,0,0,.4);
+    }
+
+    .lockbox h2{
+      color:var(--pink);
+      margin-bottom:15px;
+    }
+
+    .lockbox input{
+      width:100%;
+      padding:12px;
+      margin-top:10px;
+      border-radius:12px;
+      border:1px solid #ccc;
+      font-size:16px;
+    }
+
+    .lockbox button{
+      margin-top:15px;
+      width:100%;
+      padding:12px;
+      border:none;
+      border-radius:12px;
+      background:linear-gradient(90deg,var(--pink),var(--lightPink));
+      color:white;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .error{
+      margin-top:10px;
+      color:#b00020;
+      display:none;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ❤️ CORAZONES -->
+  <div class="hearts" id="hearts"></div>
+
+  <!-- 🔒 CONTRASEÑA -->
+  <div class="lock" id="lock">
+    <div class="lockbox">
+      <h2>Con todo mi amor 💖</h2>
+      <p>La contraseña es la fecha del día más especial de nosotros 💗<br>
+      (escríbela sin espacios)</p>
+
+      <input id="pw" type="password" placeholder="Escribe la fecha especial 💖" />
+      <button onclick="unlock()">Entrar</button>
+      <p class="error" id="err">Ups… intenta recordar nuestro día especial 💭💗</p>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <header>
+      <h1>Feliz San Valentín, Mi Cibo 🤍</h1>
+    </header>
+
+    <div class="content">
+
+      <div class="left">
+        <ul class="phrases">
+            <li>❤️ "Te amo con cada parte de mi alma y mi corazón"</li>
+            <li>❤️ "Eres, sin duda, la mujer más maravillosa que la vida ha puesto en mi camino."</li>
+            <li>❤️ "Mi único deseo es que lo nuestro no tenga final, quiero que esto sea eterno."</li>
+            <li>❤️ "Prometo ser tu refugio seguro, recuerda que siempre, pase lo que pase, tendrás mi apoyo."</li>
+            <li>❤️ "Aunque el camino se ponga difícil, nunca voy a renunciar a ti, ni al amor que nos une."</li>
+            <li>❤️ "Contigo aprendí que el amor de verdad no se rinde, se construye con paciencia y entrega."</li>
+            <li>❤️ "Eres mi motivo, mi paz y la mejor decisión que he tomado en mi vida."</li>
+        </ul>
+
+        <div class="letter">
+          <p><strong>Amor mío:</strong></p>
+          <p>Quiero que estas palabras se queden grabadas en tu corazón tanto como tú estás grabada en el mío. Eres la persona más importante de mi vida y mi amor hacia ti es lo más puro y sincero que he sentido jamás. Cada día que paso a tu lado me doy cuenta de que eres una mujer increíble, alguien tan maravillosa que sé que nunca en mi vida volvería a encontrar a alguien igual. Perderte no es una opción, porque eres mi hogar.</p>
+          
+          <p>Sé que estos últimos meses han sido difíciles y que hemos tenido que afrontar tormentas que nos han alejado un poco, pero quiero que sepas que mi compromiso contigo es inquebrantable. Estoy dispuesto a mejorar y a que crezcamos juntos para alcanzar todo lo que alguna vez anhelamos. No quiero que nos rindamos, quiero que construyamos sobre esas dificultades un amor aún más fuerte.</p>
+          
+          <p>Me haces inmensamente feliz. Solo con verte mi mundo se ilumina, tu belleza, tanto por fuera como por dentro, me cautiva cada vez más. Gracias por ser mi compañera y por hacerme el hombre más afortunado del mundo.</p>
+          
+          <p>Quédate siempre a mi lado, <strong>mi Cibo, mi negrita, mi princesa, mi bota...</strong> mi vida entera.</p>
+          
+          <p class="sign" style="text-align: right; margin-top: 20px;">
+            Con todo mi amor,<br>
+            <strong>Tu Bebote</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="right">
+        <img src="foto.jpeg" alt="Nuestra foto">
+      </div>
+
+    </div>
+
+    <footer>
+      Hecho con amor 💗
+    </footer>
+
+  </div>
+
+  <script>
+    const PASSWORD = "200424";
+
+    function unlock(){
+      const pw = document.getElementById("pw").value;
+      const err = document.getElementById("err");
+
+      if(pw === PASSWORD){
+        document.getElementById("lock").style.display = "none";
+      } else {
+        err.style.display = "block";
+      }
+    }
+
+    /* ❤️ GENERADOR DE CORAZONES */
+    const heartsContainer = document.getElementById("hearts");
+
+    function createHeart(){
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerHTML = "❤️";
+
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = (Math.random() * 25 + 15) + "px";
+      heart.style.animationDuration = (Math.random() * 6 + 5) + "s";
+
+      heartsContainer.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 11000);
+    }
+
+    setInterval(createHeart, 400);
+  </script>
+
+</body>
+</html>
